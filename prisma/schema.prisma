@@ -52,7 +52,7 @@ model entreprise {
 model facture {
   ID_Facture    Int             @id @default(autoincrement())
   ID_Client     Int?
-  Date          DateTime?       @db.Date
+  Date          DateTime?       @default(now())
   Montant_total Decimal?        @db.Decimal(10, 2)
   client        client?         @relation(fields: [ID_Client], references: [ID_Client], onDelete: NoAction, onUpdate: NoAction, map: "facture_ibfk_1")
   ligne_facture ligne_facture[]
