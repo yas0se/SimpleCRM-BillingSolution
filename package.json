@@ -1,14 +1,14 @@
 {
   "name": "second",
   "version": "1.0.0",
-  "description": "",
+  "description": "new brief from Simplon Maghreb",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "yas0se (yasser mestaoui(ait bel3id(azdou)))  ",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.8",
