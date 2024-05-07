@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model approvisionnement {
+  ID_Approvisionnement Int          @id @default(autoincrement())
+  ID_Entreprise        Int?
+  ID_Produit           Int?
+  ID_Fournisseur       Int?
+  Date                 DateTime?    @db.Date
+  Quantite             Int?
+  entreprise           entreprise?  @relation(fields: [ID_Entreprise], references: [ID_Entreprise], onDelete: NoAction, onUpdate: NoAction, map: "approvisionnement_ibfk_1")
+  produit              produit?     @relation(fields: [ID_Produit], references: [ID_Produit], onDelete: NoAction, onUpdate: NoAction, map: "approvisionnement_ibfk_2")
+  fournisseur          fournisseur? @relation(fields: [ID_Fournisseur], references: [ID_Fournisseur], onDelete: NoAction, onUpdate: NoAction, map: "approvisionnement_ibfk_3")
+
+  @@index([ID_Entreprise], map: "ID_Entreprise")
+  @@index([ID_Fournisseur], map: "ID_Fournisseur")
+  @@index([ID_Produit], map: "ID_Produit")
+}
+
+model client {
+  ID_Client        Int       @id @default(autoincrement())
+  Nom              String?   @db.VarChar(255)
+  Prenom           String?   @db.VarChar(255)
+  Adresse          String?   @db.VarChar(255)
+  Ville            String?   @db.VarChar(255)
+  Numero_telephone String?   @db.VarChar(20)
+  Email            String?   @db.VarChar(255)
+  facture          facture[]
+}
+
+model entreprise {
+  ID_Entreprise      Int                 @id @default(autoincrement())
+  Nom                String?             @db.VarChar(255)
+  Siege_social       String?             @db.VarChar(255)
+  Date_creation      DateTime?           @default(now())
+  Identifiant_fiscal String?             @db.VarChar(255)
+  Capital            Decimal?            @db.Decimal(10, 2)
+  Nombre_employes    Int?
+  Ville              String?             @db.VarChar(255)
+  Responsable        String?             @db.VarChar(255)
+  Numero_telephone   String?             @db.VarChar(20)
+  Email              String?             @db.VarChar(255)
+  approvisionnement  approvisionnement[]
+}
+
+model facture {
+  ID_Facture    Int             @id @default(autoincrement())
+  ID_Client     Int?
+  Date          DateTime?       @db.Date
+  Montant_total Decimal?        @db.Decimal(10, 2)
+  client        client?         @relation(fields: [ID_Client], references: [ID_Client], onDelete: NoAction, onUpdate: NoAction, map: "facture_ibfk_1")
+  ligne_facture ligne_facture[]
+
+  @@index([ID_Client], map: "ID_Client")
+}
+
+model fournisseur {
+  ID_Fournisseur    Int                 @id @default(autoincrement())
+  Nom               String?             @db.VarChar(255)
+  Adresse           String?             @db.VarChar(255)
+  Ville             String?             @db.VarChar(255)
+  Numero_telephone  String?             @db.VarChar(20)
+  Email             String?             @db.VarChar(255)
+  approvisionnement approvisionnement[]
+}
+
+model ligne_facture {
+  ID_Ligne   Int      @id @default(autoincrement())
+  ID_Facture Int?
+  ID_Produit Int?
+  Quantite   Int?
+  facture    facture? @relation(fields: [ID_Facture], references: [ID_Facture], onDelete: NoAction, onUpdate: NoAction, map: "ligne_facture_ibfk_1")
+  produit    produit? @relation(fields: [ID_Produit], references: [ID_Produit], onDelete: NoAction, onUpdate: NoAction, map: "ligne_facture_ibfk_2")
+
+  @@index([ID_Facture], map: "ID_Facture")
+  @@index([ID_Produit], map: "ID_Produit")
+}
+
+model produit {
+  ID_Produit        Int                 @id @default(autoincrement())
+  Nom               String?             @db.VarChar(255)
+  Prix_achat        Decimal?            @db.Decimal(10, 2)
+  Prix_vente        Decimal?            @db.Decimal(10, 2)
+  Taux_marge        Decimal?            @db.Decimal(5, 2)
+  Dimension         String?             @db.VarChar(50)
+  Taille            String?             @db.VarChar(50)
+  approvisionnement approvisionnement[]
+  ligne_facture     ligne_facture[]
+}
