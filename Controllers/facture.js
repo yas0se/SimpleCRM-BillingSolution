@@ -14,6 +14,18 @@ async function createFacture(req, res) {
   }
 }
 
+async function getFacture(req, res) {
+  const id = req.params.id;
+  try {
+    const getedFactures = await prisma.facture.findUnique({
+      where: { ID_Facture: parseInt(id)},
+    });
+    res.json(getedFactures);
+  } catch (error) {
+    console.error('Error geting Facture:', error);
+    res.status(500).json({ error: 'Error geting Facture' });
+  }
+}
 async function getAllFactures(req, res) {
   try {
     const allFactures = await prisma.facture.findMany();
@@ -53,6 +65,7 @@ async function deleteFacture(req, res) {
 }
 
 module.exports = {
+  getFacture,
   createFacture,
   getAllFactures,
   updateFacture,

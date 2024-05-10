@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 
+const fact = require('./routes/factures');
+
 const controllerClient = require('./Controllers/client');
 const controllerEntreprise = require('./Controllers/entreprise');
 const controllerProduit = require('./Controllers/produit')
-const controllerFacture = require('./Controllers/facture')
+// const controllerFacture = require('./Controllers/facture')
 const controllerLigneFacture = require('./Controllers/ligneFacture')
 
 
@@ -25,10 +27,12 @@ app.get('/produit/', controllerProduit.getAllProduits);
 app.patch('/produit/:id', controllerProduit.updateProduit);
 app.delete('/produit/:id', controllerProduit.deleteProduit);
 
-app.post('/facture/', controllerFacture.createFacture);
-app.get('/facture/', controllerFacture.getAllFactures);
-app.patch('/facture/:id', controllerFacture.updateFacture);
-app.delete('/facture/:id', controllerFacture.deleteFacture);
+app.use('/', fact);
+
+// app.post('/facture/', controllerFacture.createFacture);
+// app.get('/facture/', controllerFacture.getAllFactures);
+// app.patch('/facture/:id', controllerFacture.updateFacture);
+// app.delete('/facture/:id', controllerFacture.deleteFacture);
 
 app.post('/ligneFacture/', controllerLigneFacture.createLigneFacture);
 app.get('/ligneFacture/', controllerLigneFacture.getAllLigneFactures);
