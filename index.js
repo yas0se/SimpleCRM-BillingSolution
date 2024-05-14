@@ -8,12 +8,23 @@ const controllerEntreprise = require('./Controllers/entreprise');
 const controllerProduit = require('./Controllers/produit')
 // const controllerFacture = require('./Controllers/facture')
 const controllerLigneFacture = require('./Controllers/ligneFacture')
+const log = require('./log');
+const logger = require('./log');
 
 
 app.use(express.json());
 
+// app.use(function (req,res,next){
+//     console.log('yasser mestaoui'); 
+//     next()
+// })
+
+
 app.post('/client/', controllerClient.createClient);
-app.get('/client/', controllerClient.getAllClients);
+app.get('/client/', function (req,res,next){
+    console.log('yasser mestaoui'); 
+    next()
+}, controllerClient.getAllClients);
 app.patch('/client/:id', controllerClient.updateClient);
 app.delete('/client/:id', controllerClient.deleteClient);
 
@@ -39,4 +50,4 @@ app.get('/ligneFacture/', controllerLigneFacture.getAllLigneFactures);
 app.patch('/ligneFacture/:id', controllerLigneFacture.updateLigneFacture);
 app.delete('/ligneFacture/:id', controllerLigneFacture.deleteLigneFacture);
 
-app.listen(3001, () => console.log('app working on port 3001...'));
+app.listen(3001, () => logger.info('app working on port 3001...'));
